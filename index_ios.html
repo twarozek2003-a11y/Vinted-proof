@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#007782"><title>Vinted Proof AI — Public Demo</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f3f3ef;color:#202020;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.app{max-width:460px;margin:auto;min-height:100vh;background:#fff}
+header{height:60px;padding:0 17px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #eee;position:sticky;top:0;background:#fff;z-index:5}.logo{font-size:23px;font-weight:900}.logo span{color:#007782}.tag{font-size:11px;font-weight:800;color:#007782;background:#e7f4f3;border-radius:20px;padding:7px 9px}
+main{padding:20px 17px 90px}.screen{display:none}.screen.active{display:block}h1{font-size:27px;margin:2px 0 7px}h2{font-size:19px;margin:20px 0 10px}p{color:#666;line-height:1.45}.card{border:1px solid #e5e5e5;border-radius:16px;padding:16px;margin:13px 0}.field{width:100%;border:1px solid #ddd;border-radius:11px;padding:12px;font:inherit}.label{display:block;font-size:13px;font-weight:800;margin:15px 0 7px}.btn{width:100%;border:0;border-radius:12px;padding:14px;font-size:15px;font-weight:800;margin-top:9px}.primary{background:#007782;color:#fff}.secondary{background:#edf5f4;color:#14676d}.upload{height:210px;border:1.5px dashed #aaa;border-radius:15px;background:#f8f8f6;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;position:relative;color:#666}.upload img{width:100%;height:100%;object-fit:contain}.upload input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}.steps{display:flex;gap:5px;margin:2px 0 20px}.step{height:4px;flex:1;background:#ddd;border-radius:5px}.step.on{background:#007782}.muted{font-size:13px;color:#777}.ok{background:#eff9f1;border-color:#b9ddbf}.danger{background:#fff0ef;border-color:#efc1bd}.warn{background:#fff7e6;border-color:#efd18a}.badge{display:inline-block;padding:6px 9px;border-radius:20px;font-size:11px;font-weight:900}.green{background:#dff3e2;color:#286d39}.red{background:#ffe0dc;color:#9b3026}.yellow{background:#fff0c9;color:#765600}.score{font-size:39px;font-weight:900;color:#007782}.row{display:flex;justify-content:space-between;border-bottom:1px solid #eee;padding:10px 0;font-size:14px}.row:last-child{border:0}.compare{display:grid;grid-template-columns:1fr 1fr;gap:8px}.mini{height:150px;border-radius:12px;background:#f1f1ee;overflow:hidden;display:flex;align-items:center;justify-content:center;color:#777;font-size:12px}.mini img{width:100%;height:100%;object-fit:cover}.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(460px,100%);display:flex;background:#fff;border-top:1px solid #eee;padding:8px;z-index:6}.nav button{flex:1;border:0;background:#fff;color:#777;font-size:10px;padding:7px}.nav button.active{color:#007782;font-weight:900}
+</style></head>
+<body><div class="app">
+<header><div class="logo">vinted <span>proof</span></div><div class="tag">PUBLIC DEMO</div></header>
+<main>
+<section id="offer" class="screen active"><div class="steps"><i class="step on"></i><i class="step"></i><i class="step"></i></div><h1>Zabezpiecz transakcję</h1><p>Proof zapisuje pierwotny stan produktu jako dowód na potrzeby ewentualnego sporu.</p>
+<div class="card"><b>Nike Tech Fleece</b><div class="muted">M · czarny · 180 zł</div><p style="margin-bottom:0">Stan bardzo dobry. Małe przetarcie przy lewej kieszeni widoczne na zdjęciu.</p></div>
+<label class="label">Zdjęcie BEFORE</label><label class="upload" id="before">📷<br><b>Dodaj zdjęcie</b><input type="file" accept="image/*" onchange="choose(this,'before')"></label>
+<button class="btn primary" onclick="toBuyer()">Zapisz Snapshot</button></section>
+
+<section id="buyer" class="screen"><div class="steps"><i class="step on"></i><i class="step on"></i><i class="step"></i></div><h1>Zgłoś problem</h1><p>Opisz konkretną wadę i dodaj zdjęcie otrzymanego produktu.</p>
+<label class="label">Opis problemu</label><textarea class="field" rows="4">Na lewej nogawce jest duża plama, której nie było w ofercie.</textarea>
+<label class="label">Zdjęcie AFTER</label><label class="upload" id="after">📷<br><b>Dodaj zdjęcie</b><input type="file" accept="image/*" onchange="choose(this,'after')"></label>
+<button class="btn primary" onclick="toAI()">Prześlij zgłoszenie</button></section>
+
+<section id="ai" class="screen"><div class="steps"><i class="step on"></i><i class="step on"></i><i class="step on"></i></div><h1>Proof AI</h1><p>Demo pokazuje logikę produktu: AI sprawdza, czy zgłoszona wada była już ujawniona.</p>
+<div class="card"><div class="compare"><div><b class="muted">BEFORE</b><div class="mini" id="bm">Oferta</div></div><div><b class="muted">AFTER</b><div class="mini" id="am">Zgłoszenie</div></div></div></div>
+<div class="card danger"><span class="badge red">WADA NIEUJAWNIONA</span><div class="score">94%</div><div class="muted">pewność · DEMO</div><div class="row"><span>Wada w opisie</span><b>Nie</b></div><div class="row"><span>Wada na zdjęciu oferty</span><b>Nie</b></div><div class="row"><span>Wada na zdjęciu kupującego</span><b>Tak</b></div></div>
+<div class="card danger"><b>→ Przekazać do człowieka</b><p>AI nie zamyka sporu dotyczącego nieujawnionej wady.</p></div>
+<button class="btn secondary" onclick="disclosed()">Pokaż scenariusz: wada była ujawniona</button></section>
+
+<section id="disclosed" class="screen"><h1>Wada ujawniona</h1><p>Przykład automatyzacji prostego sporu.</p><div class="card ok"><span class="badge green">UJAWNIONA W OFERCIE</span><div class="score">98%</div><p>AI znalazło tę samą wadę w pierwotnym opisie lub zdjęciach.</p><div class="row"><span>Wada w ofercie</span><b>Tak</b></div><div class="row"><span>Wada w zgłoszeniu</span><b>Tak</b></div></div><div class="card ok"><b>✓ Automatyczne zamknięcie</b><p>Brak potrzeby angażowania pracownika.</p></div><button class="btn primary" onclick="alert('DEMO: spór zamknięty automatycznie.')">Zamknij spór</button></section>
+</main>
+<nav class="nav"><button onclick="show('offer',this)" class="active">Oferta</button><button onclick="show('buyer',this)">Zgłoszenie</button><button onclick="show('ai',this)">AI</button></nav>
+</div>
+<script>
+let beforeURL='',afterURL='';
+function show(id,btn){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));if(btn)btn.classList.add('active');scrollTo(0,0)}
+function choose(input,id){if(!input.files||!input.files[0])return;const u=URL.createObjectURL(input.files[0]);if(id==='before')beforeURL=u;else afterURL=u;document.getElementById(id).innerHTML='<img src="'+u+'"><input type="file" accept="image/*" onchange="choose(this,\''+id+'\')">';if(id==='before')document.getElementById('bm').innerHTML='<img src="'+u+'">';if(id==='after')document.getElementById('am').innerHTML='<img src="'+u+'">'}
+function toBuyer(){if(!beforeURL){alert('Dodaj zdjęcie BEFORE.');return}show('buyer',document.querySelectorAll('.nav button')[1])}
+function toAI(){if(!afterURL){alert('Dodaj zdjęcie AFTER.');return}show('ai',document.querySelectorAll('.nav button')[2])}
+function disclosed(){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));document.getElementById('disclosed').classList.add('active');scrollTo(0,0)}
+</script></body></html>
