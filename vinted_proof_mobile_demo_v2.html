@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Vinted Proof AI — Mobile Demo v2</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f2f2ee;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#202020}
+.phone{max-width:430px;margin:auto;min-height:100vh;background:#fff}.top{height:58px;border-bottom:1px solid #eee;display:flex;align-items:center;justify-content:space-between;padding:0 17px;position:sticky;top:0;background:#fff;z-index:4}.brand{font-size:22px;font-weight:850}.brand span{color:#007782}.ai{font-size:11px;background:#e9f5f4;color:#087078;padding:6px 9px;border-radius:20px;font-weight:800}
+.screen{display:none;padding:22px 18px 35px}.screen.on{display:block}h1{font-size:27px;margin:0 0 7px}h2{font-size:19px;margin:21px 0 10px}p{color:#666;line-height:1.45}.card{border:1px solid #e6e6e6;border-radius:16px;padding:16px;margin:13px 0}.btn{width:100%;border:0;border-radius:12px;padding:14px;font-weight:800;font-size:15px;margin-top:9px}.primary{background:#007782;color:#fff}.secondary{background:#edf5f4;color:#14676d}.ok{background:#eff9f1;border-color:#b9dfc0}.danger{background:#fff0ef;border-color:#efc1bd}.warn{background:#fff7e6;border-color:#efd18a}.muted{font-size:13px;color:#777}.field{width:100%;border:1px solid #ddd;border-radius:11px;padding:12px;font:inherit}.upload{height:210px;border:1.5px dashed #aaa;border-radius:15px;background:#f8f8f6;display:flex;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden;color:#777;cursor:pointer}.upload img{width:100%;height:100%;object-fit:contain}.upload input{display:none}.steps{display:flex;gap:6px;margin-bottom:20px}.step{height:4px;flex:1;background:#ddd;border-radius:4px}.step.on{background:#007782}.badge{display:inline-block;padding:6px 9px;border-radius:20px;font-size:11px;font-weight:800}.green{background:#dff3e2;color:#286d39}.red{background:#ffe0dc;color:#9b3026}.yellow{background:#fff0c9;color:#775500}.row{display:flex;justify-content:space-between;border-bottom:1px solid #eee;padding:10px 0;font-size:14px}.row:last-child{border:0}.score{font-size:36px;font-weight:900;color:#007782}.bar{height:8px;background:#e8e8e4;border-radius:10px;overflow:hidden}.bar i{display:block;height:100%;background:#007782;width:94%}.compare{display:grid;grid-template-columns:1fr 1fr;gap:8px}.mini{height:150px;border-radius:12px;background:#f0f0ed;display:flex;align-items:center;justify-content:center;text-align:center;font-size:12px;color:#777;overflow:hidden}.mini img{width:100%;height:100%;object-fit:cover}.nav{display:flex;border-top:1px solid #eee;position:sticky;bottom:0;background:#fff;padding:8px;gap:5px}.nav button{flex:1;border:0;background:#fff;padding:8px 2px;font-size:10px;color:#777}.nav button.active{color:#007782;font-weight:800}.hint{font-size:12px;color:#777;text-align:center;margin-top:8px}
+</style>
+</head>
+<body>
+<div class="phone">
+<header class="top"><div class="brand">vinted <span>proof</span></div><div class="ai">AI DEMO</div></header>
+
+<section id="s1" class="screen on">
+<div class="steps"><i class="step on"></i><i class="step"></i><i class="step"></i></div>
+<h1>Zabezpiecz transakcję</h1>
+<p>Dodaj zdjęcie produktu. W prawdziwym Vinted Proof byłoby ono zapisane jako dowód pierwotnego stanu.</p>
+<div class="card"><b>Nike Tech Fleece</b><div class="muted">M · czarny · 180 zł</div><p>Stan bardzo dobry. Małe przetarcie przy lewej kieszeni widoczne na zdjęciu.</p></div>
+<label class="muted">Zdjęcie BEFORE</label>
+<label class="upload" id="beforeBox">📷<br><b>Wybierz zdjęcie</b><div class="hint">Otworzy się galeria lub aparat</div><input id="beforeInput" type="file" accept="image/*" capture="environment" onchange="choose(this,'before')"></label>
+<button class="btn primary" onclick="next(2)">Zapisz ofertę</button>
+</section>
+
+<section id="s2" class="screen">
+<div class="steps"><i class="step on"></i><i class="step on"></i><i class="step"></i></div>
+<h1>Masz problem?</h1><p>Kupujący opisuje wadę i dodaje zdjęcie otrzymanego produktu.</p>
+<div class="card"><b>Co jest nie tak?</b><textarea class="field" style="margin-top:9px;height:105px">Na lewej nogawce jest duża plama, której nie było w ofercie.</textarea></div>
+<label class="muted">Zdjęcie AFTER</label>
+<label class="upload" id="afterBox">📷<br><b>Wybierz zdjęcie</b><div class="hint">Otworzy się galeria lub aparat</div><input id="afterInput" type="file" accept="image/*" capture="environment" onchange="choose(this,'after')"></label>
+<button class="btn primary" onclick="next(3)">Prześlij zgłoszenie</button>
+</section>
+
+<section id="s3" class="screen">
+<div class="steps"><i class="step on"></i><i class="step on"></i><i class="step on"></i></div>
+<h1>Proof AI analizuje</h1><p>Porównujemy pierwotną ofertę z dowodami kupującego.</p>
+<div class="card"><div class="compare"><div><b class="muted">BEFORE</b><div class="mini" id="bmini">Oferta</div></div><div><b class="muted">AFTER</b><div class="mini" id="amini">Zgłoszenie</div></div></div></div>
+<div class="card danger"><span class="badge red">NIEUJAWNIONA WADA</span><div class="score">94%</div><div class="muted">pewność klasyfikacji · DEMO</div><div class="bar" style="margin-top:9px"><i></i></div>
+<div class="row"><span>Wada w opisie</span><b>Nie</b></div><div class="row"><span>Wada na zdjęciu oferty</span><b>Nie</b></div><div class="row"><span>Wada na zdjęciu kupującego</span><b>Tak</b></div></div>
+<div class="card danger"><b>→ Sprawa trafia do człowieka</b><p>AI nie zamyka tego sporu. Pracownik Vinted podejmuje ostateczną decyzję.</p></div>
+<button class="btn secondary" onclick="known()">Pokaż drugi scenariusz: wada była ujawniona</button>
+</section>
+
+<section id="s4" class="screen">
+<h1>Wada ujawniona</h1><p>Drugi scenariusz naszego produktu.</p>
+<div class="card ok"><span class="badge green">UJAWNIONA W OFERCIE</span><div class="score">98%</div><p>AI znalazło tę samą wadę w pierwotnym opisie lub na zdjęciu oferty.</p><div class="row"><span>Wada w ofercie</span><b>Tak</b></div><div class="row"><span>Wada w zgłoszeniu</span><b>Tak</b></div></div>
+<div class="card ok"><b>✓ Automatyczne zamknięcie sporu</b><p>Wada była wcześniej przedstawiona kupującemu.</p></div>
+<button class="btn primary" onclick="alert('DEMO: spór został automatycznie zamknięty.')">Zamknij spór</button>
+<button class="btn secondary" onclick="next(1)">Wróć do początku</button>
+</section>
+
+<nav class="nav"><button class="active" onclick="next(1)">Oferta</button><button onclick="next(2)">Zgłoszenie</button><button onclick="next(3)">AI</button></nav>
+</div>
+<script>
+let beforeUrl='',afterUrl='';
+function next(n){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('on'));document.getElementById('s'+n).classList.add('on');scrollTo(0,0)}
+function choose(input,id){
+ if(!input.files||!input.files[0])return;
+ const url=URL.createObjectURL(input.files[0]);
+ if(id==='before')beforeUrl=url; else afterUrl=url;
+ const box=document.getElementById(id+'Box');
+ box.innerHTML='<img src="'+url+'"><input type="file" accept="image/*" capture="environment" onchange="choose(this,\''+id+'\')">';
+ if(id==='before')document.getElementById('bmini').innerHTML='<img src="'+url+'">';
+ if(id==='after')document.getElementById('amini').innerHTML='<img src="'+url+'">';
+}
+function known(){document.getElementById('s3').classList.remove('on');document.getElementById('s4').classList.add('on');scrollTo(0,0)}
+</script>
+</body></html>
